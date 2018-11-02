@@ -11,16 +11,23 @@ summary(candy)
 ```
 
 ```{r}
-candy.lm = lm(winpercent ~ . - competitorname, data=candy)
+candy.lm = lm(winpercent ~ (.- competitorname)^2, data=candy)
 summary(candy.lm)
-plot(candy.lm)
 ```
 
 
 ```{r}
+candy.AIC 
+```
+
+```{r}
 library(BAS)
-candy.bas = bas.lm(winpercent ~ (. - competitorname)^2, data=candy,
-                   prior = 'JZS', modelprior=uniform())
-image(candy.bas)
+candy.bas = bas.lm(formula(candy.AIC), data=candy,
+                   prior = 'JZS', modelprior=uniform(),
+                   method='MCMC',
+                   n.models=10000, MCMC.iterations=800000, thin=40, 
+                   force.heredity = TRUE)
+diagnostics(candy.bas)
+plot(candy.bas)
 ```
 
