@@ -1,0 +1,26 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+Read Data
+
+```{r}
+candy = read.csv("candy-data.csv")
+summary(candy)
+```
+
+```{r}
+candy.lm = lm(winpercent ~ . - competitorname, data=candy)
+summary(candy.lm)
+plot(candy.lm)
+```
+
+
+```{r}
+library(BAS)
+candy.bas = bas.lm(winpercent ~ (. - competitorname)^2, data=candy,
+                   prior = 'JZS', modelprior=uniform())
+image(candy.bas)
+```
+
